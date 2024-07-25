@@ -4,7 +4,7 @@ require("dotenv").config();
 const { configEJS } = require("./src/config/templateEngine");
 const customerRouter = require("./src/router/customerRouter");
 const configBodyParser = require("./src/config/bodyParser");
-
+const productRouter = require("./src/router/productRouter");
 //Config body parser
 configBodyParser(app);
 
@@ -20,3 +20,6 @@ app.listen(process.env.PORT, () => {
 
 //Customer API
 app.use("/customer", customerRouter);
+
+//Product API
+app.use("/product", productRouter);
