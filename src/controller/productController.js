@@ -1,15 +1,31 @@
 const {
   getAllProductService,
   createProductService,
+  searchProductService,
   getDetailsProductService,
+  filterProductService,
 } = require("../service/productService");
 const getAllProductController = async (req, res) => {
   try {
-    const data = await getAllProductService(req.query);
-    res.status(200).json({
-      EC: 0,
-      data,
-    });
+    if (req.query.productName && !req.query.productName == "") {
+      const data = await searchProductService(req.query.productName);
+      if (data.length == 0)
+        return res.status(200).json({
+          ec: 0,
+          message: "no data found",
+        });
+      res.status(200).json({
+        EC: 0,
+        data: data,
+        quantity: data.length,
+      });
+    } else {
+      const data = await getAllProductService(req.query);
+      res.status(200).json({
+        EC: 0,
+        data,
+      });
+    }
   } catch (error) {
     res.status(400).json({
       EC: 1,
@@ -52,8 +68,22 @@ const getProductDetail = async (req, res) => {
     });
   }
 };
+const filterProductController = async (req, res) => {
+  try {
+    const data = await filterProductService(req.query);
+    res.status(200).json({
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      EC: 1,
+      message: JSON.stringify(error),
+    });
+  }
+};
 module.exports = {
   getAllProductController,
   createProductController,
   getProductDetail,
+  filterProductController,
 };

@@ -2,7 +2,6 @@ const { createOrderService } = require("../service/orderService");
 const createOrderController = async (req, res) => {
   try {
     const result = await createOrderService(req.body);
-    console.log("result of controller", result);
     if (result.EC == 1) {
       res.status(400).json({
         EC: 1,

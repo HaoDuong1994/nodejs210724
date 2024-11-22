@@ -70,8 +70,96 @@ const getDetailsProductService = async (productID) => {
   }
 };
 
+const searchProductService = async (stringData) => {
+  console.log("service >>", stringData);
+  try {
+    const connection = await database();
+    const [data] = await connection.query(
+      `SELECT * FROM products WHERE productName like '%${stringData}%' limit 8`
+    );
+    return data;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+const filterProductService = async (reqQuery) => {
+  try {
+    const connection = await database();
+    console.log(reqQuery);
+    const { price, productName } = reqQuery;
+    console.log(price);
+    //find product price under 500.000
+    if (price == 1) {
+      const [data] = await connection.query(
+        `SELECT * FROM products WHERE buyPrice < 500000 and productName like '%${productName}%' `
+      );
+      if (data.length == 0)
+        return {
+          EC: 1,
+          message: "no product found",
+        };
+      return {
+        EC: 0,
+        quantity: data.length,
+        data,
+      };
+    }
+    //find product price from 500.000 to 1.500.000
+    if (price == 2) {
+      const [data] = await connection.query(
+        `SELECT * FROM products WHERE buyPrice BETWEEN 500000 AND 1500000 AND productName like '%${productName}%' `
+      );
+      if (data.length == 0)
+        return {
+          EC: 1,
+          message: "no product found",
+        };
+      return {
+        EC: 0,
+        quantity: data.length,
+        data,
+      };
+    }
+    //find product price from 500.000 to 1.500.000
+    if (price == 3) {
+      const [data] = await connection.query(
+        `SELECT * FROM products WHERE buyPrice BETWEEN 1500000 AND 2500000 AND productName like '%${productName}%' `
+      );
+      if (data.length == 0)
+        return {
+          EC: 1,
+          message: "no product found",
+        };
+      return {
+        EC: 0,
+        quantity: data.length,
+        data,
+      };
+    }
+    //find product price over 2.500.000
+    if (price == 4) {
+      const [data] = await connection.query(
+        `SELECT * FROM products WHERE buyPrice > 2500000   AND productName like '%${productName}%' `
+      );
+      if (data.length == 0)
+        return {
+          EC: 1,
+          message: "no product found",
+        };
+      return {
+        EC: 0,
+        quantity: data.length,
+        data,
+      };
+    }
+  } catch (error) {
+    console.log("error from filter product service", error);
+  }
+};
 module.exports = {
   getAllProductService,
   createProductService,
   getDetailsProductService,
+  searchProductService,
+  filterProductService,
 };
