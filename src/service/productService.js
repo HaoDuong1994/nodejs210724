@@ -7,14 +7,15 @@ const getAllProductService = async (reqQuery) => {
       const { page, productType } = reqQuery;
       const limit = 8;
       let offset = (page - 1) * limit;
-      if (productType) {
+      if (productType !== "all") {
         const [data] = await connection.query(
           `select * from products 
           where productType = '${productType}' 
           limit ${limit} offset ${offset}`
         );
         return data;
-      } else {
+      }
+      if (productType == "all") {
         const [data] = await connection.query(
           `select * from products limit ${limit} offset ${offset}`
         );
@@ -71,7 +72,6 @@ const getDetailsProductService = async (productID) => {
 };
 
 const searchProductService = async (stringData) => {
-  console.log("service >>", stringData);
   try {
     const connection = await database();
     const [data] = await connection.query(
@@ -91,7 +91,7 @@ const filterProductService = async (reqQuery) => {
     //find product price under 500.000
     if (price == 1) {
       const [data] = await connection.query(
-        `SELECT * FROM products WHERE buyPrice < 500000 and productName like '%${productName}%' `
+        `SELECT * FROM products WHERE buyPrice < 500000 and productName like '%${productName}%' LIMIT 8`
       );
       if (data.length == 0)
         return {
@@ -107,12 +107,12 @@ const filterProductService = async (reqQuery) => {
     //find product price from 500.000 to 1.500.000
     if (price == 2) {
       const [data] = await connection.query(
-        `SELECT * FROM products WHERE buyPrice BETWEEN 500000 AND 1500000 AND productName like '%${productName}%' `
+        `SELECT * FROM products WHERE buyPrice BETWEEN 500000 AND 1500000 AND productName like '%${productName}%' LIMIT 8`
       );
       if (data.length == 0)
         return {
           EC: 1,
-          message: "no product found",
+          message: "No product found",
         };
       return {
         EC: 0,
@@ -123,12 +123,12 @@ const filterProductService = async (reqQuery) => {
     //find product price from 500.000 to 1.500.000
     if (price == 3) {
       const [data] = await connection.query(
-        `SELECT * FROM products WHERE buyPrice BETWEEN 1500000 AND 2500000 AND productName like '%${productName}%' `
+        `SELECT * FROM products WHERE buyPrice BETWEEN 1500000 AND 2500000 AND productName like '%${productName}%' LIMIT 8`
       );
       if (data.length == 0)
         return {
           EC: 1,
-          message: "no product found",
+          message: "No product found",
         };
       return {
         EC: 0,
@@ -139,12 +139,12 @@ const filterProductService = async (reqQuery) => {
     //find product price over 2.500.000
     if (price == 4) {
       const [data] = await connection.query(
-        `SELECT * FROM products WHERE buyPrice > 2500000   AND productName like '%${productName}%' `
+        `SELECT * FROM products WHERE buyPrice > 2500000   AND productName like '%${productName}%' LIMIT 8`
       );
       if (data.length == 0)
         return {
           EC: 1,
-          message: "no product found",
+          message: "No product found",
         };
       return {
         EC: 0,
