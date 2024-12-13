@@ -9,6 +9,7 @@ const configBodyParser = require("./src/config/bodyParser");
 const productRouter = require("./src/router/productRouter");
 const orderRouter = require("./src/router/orderRouter");
 const orderDetailsRouter = require("./src/router/orderDetailsRouter");
+const newsRouter = require("./src/router/newsRouter");
 //Config body parser
 configBodyParser(app);
 
@@ -36,3 +37,6 @@ app.use("/orders", orderRouter);
 
 //Order Details API
 app.use("/orderDetails", orderDetailsRouter);
+
+//News API
+app.use("/news", newsRouter);
