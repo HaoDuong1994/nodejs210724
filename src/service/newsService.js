@@ -10,7 +10,6 @@ const getNewsService = async () => {
 };
 const createNewsService = async (body) => {
   try {
-    console.log(body);
     const { title, descriptionNews, content, titleImg } = body;
     const connection = await database();
     const [results] = await connection.query(`
@@ -21,13 +20,24 @@ const createNewsService = async (body) => {
         '${titleImg}'
       )
       `);
-    console.log(">>>>>>>>>>>>>>", results);
     if (results.serverStatus == 2) return body;
   } catch (error) {
     console.log("error create news", error);
   }
 };
+const getNewsDetail = async (idNews) => {
+  try {
+    const connection = await database();
+    const [results] = await connection.query(`
+        SELECT * FROM news WHERE newsId = ${idNews}
+      `);
+    if (results) return results[0];
+  } catch (error) {
+    console.log("error get news detail service", error);
+  }
+};
 module.exports = {
   getNewsService,
   createNewsService,
+  getNewsDetail,
 };
