@@ -37,6 +37,6 @@ app.use("/orders", orderRouter);
 
 //Order Details API
 app.use("/orderDetails", orderDetailsRouter);
-
+console.log("news brnach");
 //News API
 app.use("/news", newsRouter);
